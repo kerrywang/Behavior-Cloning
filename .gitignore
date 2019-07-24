@@ -1,0 +1,6 @@
+models/__pycache__/*
+.idea/
+__pycache__/
+saved_models/
+CarND-Behavioral-Cloning-P3/
+data/

@@ -2,7 +2,7 @@ from keras.models import Sequential, Model
 from keras.layers import Flatten, Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Activation, Lambda, Input, GlobalAveragePooling2D
 from keras.layers.normalization import BatchNormalization
 from keras.applications.inception_v3 import InceptionV3
-import tensorflow as tf
+from keras.backend import tf
 
 def preprocess_model():
     model = Sequential()

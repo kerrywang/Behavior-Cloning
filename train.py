@@ -12,6 +12,6 @@ def train(label, image):
 
 
 if __name__ == '__main__':
-    image, label = util.parse_drive_log("../CarND-Behavioral-Cloning-P3/data/driving_log.csv")
+    image, label = util.parse_drive_log("data/driving_log.csv")
     print (image[0].shape)
     train(label, image)
