@@ -50,7 +50,6 @@ def parse_drive_log(csv_file_paths):
             # measurement["throttle"] = float(line[4])
             # measurement["brake"] = float(line[5])
             # measurement["speed"] = float(line[6])
-    print (images.shape, measurements.shape)
     return np.array(images), np.array(measurements)
 
 def model_save_path(name):

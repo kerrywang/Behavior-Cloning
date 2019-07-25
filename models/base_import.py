@@ -1,5 +1,5 @@
 from keras.models import Sequential, Model
-from keras.layers import Flatten, Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Activation, Lambda, Input, GlobalAveragePooling2D, Cropping2D
+from keras.layers import Flatten, Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Activation, Lambda, Input, GlobalAveragePooling2D, Cropping2D, Convolution2D
 from keras.layers.normalization import BatchNormalization
 from keras.applications.inception_v3 import InceptionV3
 from keras import backend as K
@@ -63,5 +63,38 @@ def inception_v3():
     predictions = Dense(1)(x)
     return Model(inputs=image_input, outputs=predictions)
     
+def nvidia_network():
+    model = Sequential()
+
+    model.add(Lambda(lambda x: x / 255.0 - 0.5, input_shape = (160, 320, 3)))
+    model.add(Cropping2D(cropping=((50,20), (0,0)), input_shape=(160,320,3)))
     
+    model.add(Convolution2D(24, 5, 5, subsample=(2, 2)))
+    model.add(Activation('relu'))
+    
+    model.add(Convolution2D(36, 5, 5, subsample=(2, 2)))
+    model.add(Activation('relu'))
+    
+    model.add(Convolution2D(48, 5, 5, subsample=(2, 2)))
+    model.add(Activation('relu'))
+
+    model.add(Convolution2D(64, 3, 3, subsample=(1, 1)))
+    model.add(Activation('relu'))
+
+    model.add(Convolution2D(64, 3, 3, subsample=(1, 1))) 
+    model.add(Activation('relu'))
+
+    model.add(Flatten())    
+
+    model.add(Dense(100))
+    model.add(Activation('relu'))
+    
+    model.add(Dense(50))
+    model.add(Activation('relu'))
+    
+    model.add(Dense(10))
+    model.add(Activation('relu'))
+
+    model.add(Dense(1))
+    return model
     
