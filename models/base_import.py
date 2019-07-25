@@ -1,8 +1,8 @@
 from keras.models import Sequential, Model
-from keras.layers import Flatten, Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Activation, Lambda, Input, GlobalAveragePooling2D
+from keras.layers import Flatten, Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Activation, Lambda, Input, GlobalAveragePooling2D, Cropping2D
 from keras.layers.normalization import BatchNormalization
 from keras.applications.inception_v3 import InceptionV3
-from keras.backend import tf
+from keras import backend as K
 
 def preprocess_model():
     model = Sequential()
@@ -42,17 +42,22 @@ def alex_net():
 
 
 def inception_v3():
+    def resize(image):
+        import tensorflow as tf
+        return tf.image.resize_images(image, (139, 139))
+
 #     model = preprocess_model()
     image_input = Input(shape=(160, 320, 3))
-    resized_input = Lambda(lambda image: tf.image.resize_images(image, (139, 139)))(image_input)
-#     normalized_input = Lambda(lambda x: x / 255.0 - 0.5)(resized_input)
+    # cropped_input = Cropping2D(cropping=((50, 20), (0, 0)))(image_input)
+    resized_input = Lambda(resize)(image_input)
+    normalized_input = Lambda(lambda x: x / 255.0 - 0.5)(resized_input)
     
     input_size = 139
 
     # Using Inception with ImageNet pre-trained weights
     inception = InceptionV3(weights='imagenet', include_top=False,input_shape=(input_size,input_size,3))
     
-    inp = inception(resized_input)
+    inp = inception(normalized_input)
     x = GlobalAveragePooling2D()(inp)
     x = Dense(512, activation='relu')(x)
     predictions = Dense(1)(x)
